@@ -59,7 +59,7 @@ export async function generateMetadata(
         title: poll.title,
         openGraph: {
             title: poll.title,
-            images: [`/api/image?id=${id}.png`],
+            images: [`/api/image?id=${id}`],
         },
         other: {
             ...fcMetadata,

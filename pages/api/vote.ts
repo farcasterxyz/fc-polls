@@ -33,9 +33,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         <head>
           <title>Vote Recorded</title>
           <meta property="og:title" content="Vote Recorded">
-          <meta property="og:image_url" content="/api/image?id=${poll.id}&results=${buttonId === 5 ? 'false': 'true'}">
+          <meta property="og:image_url" content="${process.env['HOST']}/api/image?id=${poll.id}&results=${buttonId === 5 ? 'false': 'true'}">
           <meta name="fc:frame" content="vNext">
-          <meta name="fc:submit_url" content="/api/vote?id=${poll.id}">
+          <meta name="fc:submit_url" content="${process.env['HOST']}/api/vote?id=${poll.id}">
           <meta name="fc:frame:button:5" content="Back">
         </head>
         <body>
