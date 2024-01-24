@@ -345,23 +345,26 @@ function PollOptions({poll, onChange} : {poll: Poll, onChange: (index: number) =
 
 function PollResults({poll} : {poll: Poll}) {
     return (
-        <div className="mb-4 text-left">
-            {[poll.option1, poll.option2, poll.option3, poll.option4].filter(e => e !== "").map((option, index) => (
-                <label key={index} className="block">
-                    {option} - {
-                        // @ts-ignore
-                        poll[`votes${index+1}`]
-                    }
-                </label>
-            ))}
+        <div>
+            <img src={`/api/image?id=${poll.id}&results=true&date=${Date.now()}`} alt='poll results'/>
+            {/*<div className="mb-4 text-left">*/}
+            {/*    {[poll.option1, poll.option2, poll.option3, poll.option4].filter(e => e !== "").map((option, index) => (*/}
+            {/*        <label key={index} className="block">*/}
+            {/*            {option} - {*/}
+            {/*            // @ts-ignore*/}
+            {/*            poll[`votes${index + 1}`]*/}
+            {/*        }*/}
+            {/*        </label>*/}
+            {/*    ))}*/}
+            {/*</div>*/}
         </div>
     );
 }
 
-export function PollVoteForm({poll, viewResults} : {poll: Poll, viewResults?: boolean}) {
+export function PollVoteForm({poll, viewResults}: { poll: Poll, viewResults?: boolean }) {
     const [selectedOption, setSelectedOption] = useState(-1);
     const searchParams = useSearchParams();
-    const showResults = searchParams.get("results");
+    const showResults = searchParams?.get("results");
     viewResults = !!showResults;
     let formRef = useRef<HTMLFormElement>(null);
     let voteOnPoll = votePoll.bind(null, poll);
