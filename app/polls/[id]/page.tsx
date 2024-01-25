@@ -48,7 +48,7 @@ export async function generateMetadata(
 
     const fcMetadata: Record<string, string> = {
         "fc:frame": "vNext",
-        "fc:frame:post_url": `/api/vote?id=${id}`,
+        "fc:frame:post_url": `${process.env['HOST']}/api/vote?id=${id}`,
     };
     [poll.option1, poll.option2, poll.option3, poll.option4].filter(o => o !== "").map((option, index) => {
         fcMetadata[`fc:frame:button:${index + 1}`] = option;
@@ -63,7 +63,8 @@ export async function generateMetadata(
         },
         other: {
             ...fcMetadata,
-        }
+        },
+        metadataBase: new URL(process.env['HOST'] || '')
     }
 }
 function getMeta(
