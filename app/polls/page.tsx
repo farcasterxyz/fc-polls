@@ -1,11 +1,11 @@
 import {kv} from "@vercel/kv";
 import {Feature, Poll} from "@/app/types";
 
-const ONE_DAY_IN_MS = 86400000;
+const SEVEN_DAYS_IN_MS = 1000 * 60 * 60 * 24 * 7;
 
 async function getPolls() {
     try {
-        let pollIds = await kv.zrange("polls_by_date", Date.now(), Date.now() - ONE_DAY_IN_MS, {byScore: true, rev: true});
+        let pollIds = await kv.zrange("polls_by_date", Date.now(), Date.now() - SEVEN_DAYS_IN_MS, {byScore: true, rev: true});
 
         if (!pollIds.length) {
             return [];
