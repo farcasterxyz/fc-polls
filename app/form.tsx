@@ -345,7 +345,7 @@ function PollOptions({poll, onChange} : {poll: Poll, onChange: (index: number) =
 
 function PollResults({poll} : {poll: Poll}) {
     return (
-        <div>
+        <div className="mb-4">
             <img src={`/api/image?id=${poll.id}&results=true&date=${Date.now()}`} alt='poll results'/>
             {/*<div className="mb-4 text-left">*/}
             {/*    {[poll.option1, poll.option2, poll.option3, poll.option4].filter(e => e !== "").map((option, index) => (*/}
