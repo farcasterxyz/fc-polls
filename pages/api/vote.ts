@@ -26,6 +26,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             if (!poll) {
                 return res.status(400).send('Missing poll ID');
             }
+            const imageUrl = `${process.env['HOST']}/api/image?id=${poll.id}&results=${results ? 'false': 'true'}&date=${Date.now()}`
 
             // Return an HTML response
             res.setHeader('Content-Type', 'text/html');
@@ -35,9 +36,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         <head>
           <title>Vote Recorded</title>
           <meta property="og:title" content="Vote Recorded">
-          <meta property="og:image" content="${process.env['HOST']}/api/image?id=${poll.id}&results=${results ? 'false': 'true'}">
+          <meta property="og:image" content="${imageUrl}">
           <meta name="fc:frame" content="vNext">
-          <meta name="fc:frame:image" content="${process.env['HOST']}/api/image?id=${poll.id}&results=${results ? 'false': 'true'}">
+          <meta name="fc:frame:image" content="${imageUrl}">
           <meta name="fc:frame:post_url" content="${process.env['HOST']}/api/vote?id=${poll.id}&voted=true&results=${results ? 'false' : 'true'}">
           <meta name="fc:frame:button:1" content="${results ? "View Results" : "Back" }">
         </head>
