@@ -8,6 +8,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // For example, let's assume you receive an option in the body
         try {
             const pollId = req.query['id']
+            const results = req.query['results'] === 'true'
             if (!pollId) {
                 return res.status(400).send('Missing poll ID');
             }
@@ -15,7 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const { option } = req.body;
 
             const buttonId = parseInt(option)
-            if (buttonId > 0 && buttonId < 5) {
+            if (buttonId > 0 && buttonId < 5 && !results) {
                 await kv.hincrby(`poll:${pollId}`, `votes${buttonId}`, 1);
             }
 
@@ -33,10 +34,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         <head>
           <title>Vote Recorded</title>
           <meta property="og:title" content="Vote Recorded">
-          <meta property="og:image_url" content="${process.env['HOST']}/api/image?id=${poll.id}&results=${buttonId === 5 ? 'false': 'true'}">
+          <meta property="og:image" content="${process.env['HOST']}/api/image?id=${poll.id}&results=${results ? 'false': 'true'}">
           <meta name="fc:frame" content="vNext">
-          <meta name="fc:submit_url" content="${process.env['HOST']}/api/vote?id=${poll.id}">
-          <meta name="fc:frame:button:5" content="Back">
+          <meta name="fc:post_url" content="${process.env['HOST']}/api/vote?id=${poll.id}&results=${results ? 'false' : 'true'}">
+          <meta name="fc:frame:button:1" content="Back">
         </head>
         <body>
           <h1>Thank you for voting!</h1>
