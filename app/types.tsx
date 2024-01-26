@@ -1,10 +1,3 @@
-export type Feature = {
-  id: string;
-  title: string;
-  score: string;
-  created_at: string;
-};
-
 export type Poll = {
   id: string;
   title: string;

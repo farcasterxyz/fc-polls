@@ -2,22 +2,8 @@
 
 import { kv } from "@vercel/kv";
 import { revalidatePath } from "next/cache";
-import {Feature, Poll} from "./types";
+import {Poll} from "./types";
 import {redirect} from "next/navigation";
-
-export async function saveFeature(feature: Feature, formData: FormData) {
-  let newFeature = {
-    ...feature,
-    title: formData.get("feature") as string,
-  };
-  await kv.hset(`item:${newFeature.id}`, newFeature);
-  await kv.zadd("items_by_score", {
-    score: Number(newFeature.score),
-    member: newFeature.id,
-  });
-
-  revalidatePath("/");
-}
 
 export async function savePoll(poll: Poll, formData: FormData) {
   let newPoll = {
@@ -46,14 +32,6 @@ export async function votePoll(poll: Poll, optionIndex: number) {
   redirect(`/polls/${poll.id}?results=true`);
 }
 
-export async function upvote(feature: Feature) {
-  const newScore = Number(feature.score) + 1;
-  await kv.hset(`item:${feature.id}`, {
-    ...feature,
-    score: newScore,
-  });
-
-  await kv.zadd("items_by_score", { score: newScore, member: feature.id });
-
-  revalidatePath("/");
+export async function redirectToPolls() {
+  redirect("/polls");
 }

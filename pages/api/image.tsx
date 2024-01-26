@@ -12,18 +12,23 @@ let fontData = fs.readFileSync(fontPath)
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
         const pollId = req.query['id']
+        // const fid = parseInt(req.query['fid']?.toString() || '')
         if (!pollId) {
             return res.status(400).send('Missing poll ID');
         }
 
         let poll: Poll | null = await kv.hgetall(`poll:${pollId}`);
 
+
         if (!poll) {
             return res.status(400).send('Missing poll ID');
         }
 
         const showResults = req.query['results'] === 'true'
-
+        // let votedOption: number | null = null
+        // if (showResults && fid > 0) {
+        //     votedOption = await kv.hget(`poll:${pollId}:votes`, `${fid}`) as number
+        // }
 
         const pollOptions = [poll.option1, poll.option2, poll.option3, poll.option4]
             .filter((option) => option !== '');
@@ -38,7 +43,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     // @ts-ignore
                     const votes = poll[`votes${index+1}`]
                     const percentOfTotal = totalVotes ? Math.round(votes / totalVotes * 100) : 0;
-                    const text = showResults ? `${percentOfTotal}%: ${option} (${votes} votes)` : `${index + 1}. ${option}`
+                    let text = showResults ? `${percentOfTotal}%: ${option} (${votes} votes)` : `${index + 1}. ${option}`
                     return { option, votes, text, percentOfTotal }
                 })
         };
@@ -89,16 +94,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     weight: 400
                 }]
             })
-
-        // Create an SVG with poll results
-        // let svg = `<svg width="500" height="${30 + pollData.options.length * 60}" xmlns="http://www.w3.org/2000/svg">`
-        //     + `<text x="10" y="20" font-family="Arial" font-size="20">${pollData.question}</text>`;
-        //
-        // pollData.options.forEach((opt, index) => {
-        //     svg += `<text x="10" y="${50 + index * 60}" font-family="Arial" font-size="15">${opt.text}</text>`;
-        // });
-        //
-        // svg += `</svg>`;
 
         // Convert SVG to PNG using Sharp
         const pngBuffer = await sharp(Buffer.from(svg))
