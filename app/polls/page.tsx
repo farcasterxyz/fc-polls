@@ -1,5 +1,6 @@
 import {kv} from "@vercel/kv";
 import {Feature, Poll} from "@/app/types";
+import Link from "next/link";
 
 const SEVEN_DAYS_IN_MS = 1000 * 60 * 60 * 24 * 7;
 
@@ -46,6 +47,11 @@ export default async function Page() {
                         })
                     }
                 </div>
+                <Link href="/">
+                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        Create Poll
+                    </button>
+                </Link>
             </main>
         </div>
     );

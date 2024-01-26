@@ -46,6 +46,11 @@ export async function votePoll(poll: Poll, optionIndex: number) {
   redirect(`/polls/${poll.id}?results=true`);
 }
 
+export async function redirectToPolls() {
+  redirect("/polls");
+}
+
+
 export async function upvote(feature: Feature) {
   const newScore = Number(feature.score) + 1;
   await kv.hset(`item:${feature.id}`, {

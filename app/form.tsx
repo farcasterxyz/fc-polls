@@ -2,10 +2,10 @@
 
 import clsx from "clsx";
 import {startTransition, useOptimistic, useRef, useState, useTransition} from "react";
-import {saveFeature, savePoll, upvote, votePoll} from "./actions";
+import {redirectToPolls, saveFeature, savePoll, upvote, votePoll} from "./actions";
 import { v4 as uuidv4 } from "uuid";
 import {Feature, Poll} from "./types";
-import {useSearchParams} from "next/navigation";
+import {useRouter, useSearchParams} from "next/navigation";
 
 function Item({
   isFirst,
@@ -307,7 +307,7 @@ export function PollCreateForm() {
               <div className={"pt-2 flex justify-end"}>
                   <button
                       className={clsx(
-                          "flex items-center p-1 justify-center px-4 h-10 text-lg border bg-black text-white rounded-md w-24 focus:outline-none focus:ring focus:ring-blue-300 focus:bg-gray-800",
+                          "flex items-center p-1 justify-center px-4 h-10 text-lg border bg-blue-500 text-white rounded-md w-24 focus:outline-none focus:ring focus:ring-blue-300 hover:bg-blue-700 focus:bg-blue-700",
                           state.pending && "bg-gray-700 cursor-not-allowed",
                       )}
                       type="submit"
@@ -363,9 +363,9 @@ function PollResults({poll} : {poll: Poll}) {
 
 export function PollVoteForm({poll, viewResults}: { poll: Poll, viewResults?: boolean }) {
     const [selectedOption, setSelectedOption] = useState(-1);
+    const router = useRouter();
     const searchParams = useSearchParams();
-    const showResults = searchParams?.get("results");
-    viewResults = !!showResults;
+    viewResults = true;     // Only allow voting via the api
     let formRef = useRef<HTMLFormElement>(null);
     let voteOnPoll = votePoll.bind(null, poll);
     let [isPending, startTransition] = useTransition();
@@ -414,14 +414,15 @@ export function PollVoteForm({poll, viewResults}: { poll: Poll, viewResults?: bo
                             voted: true,
                         });
 
-                        await votePoll(newPoll, selectedOption);
+                        await redirectToPolls();
+                        // await votePoll(newPoll, selectedOption);
                     });
                 }}
             >
                 {state.showResults ? <PollResults poll={poll}/> : <PollOptions poll={poll} onChange={handleVote}/>}
                 {state.showResults ? <button
                         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                        onClick={() => window.history.back()}
+                        type="submit"
                     >Back</button> :
                     <button
                         className={"bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" + (selectedOption < 1 ? " cursor-not-allowed" : "")}

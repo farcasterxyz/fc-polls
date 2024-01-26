@@ -12,18 +12,23 @@ let fontData = fs.readFileSync(fontPath)
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
         const pollId = req.query['id']
+        const fid = parseInt(req.query['fid']?.toString() || '')
         if (!pollId) {
             return res.status(400).send('Missing poll ID');
         }
 
         let poll: Poll | null = await kv.hgetall(`poll:${pollId}`);
 
+
         if (!poll) {
             return res.status(400).send('Missing poll ID');
         }
 
         const showResults = req.query['results'] === 'true'
-
+        let votedOption: number | null = null
+        if (showResults && fid > 0) {
+            votedOption = await kv.hget(`poll:${pollId}:votes`, `${fid}`) as number
+        }
 
         const pollOptions = [poll.option1, poll.option2, poll.option3, poll.option4]
             .filter((option) => option !== '');
@@ -38,7 +43,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     // @ts-ignore
                     const votes = poll[`votes${index+1}`]
                     const percentOfTotal = totalVotes ? Math.round(votes / totalVotes * 100) : 0;
-                    const text = showResults ? `${percentOfTotal}%: ${option} (${votes} votes)` : `${index + 1}. ${option}`
+                    let text = showResults ? `${percentOfTotal}%: ${option} (${votes} votes)` : `${index + 1}. ${option}`
+                    if (votedOption === index + 1) {
+                        text = text + ' (You)'
+                    }
                     return { option, votes, text, percentOfTotal }
                 })
         };

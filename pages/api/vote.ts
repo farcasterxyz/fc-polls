@@ -9,16 +9,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         try {
             const pollId = req.query['id']
             const results = req.query['results'] === 'true'
-            const voted = req.query['voted'] === 'true'
+            let voted = req.query['voted'] === 'true'
             if (!pollId) {
                 return res.status(400).send('Missing poll ID');
             }
 
-            const { option } = req.body;
+            // const { option } = req.body;
+            const buttonId = parseInt(req.body?.untrustedData?.buttonIndex)
+            const fid = parseInt(req.body?.untrustedData?.fid)
+            const votedOption = await kv.hget(`poll:${pollId}:votes`, `${fid}`)
+            voted = voted || !!votedOption
 
-            const buttonId = parseInt(option)
             if (buttonId > 0 && buttonId < 5 && !results && !voted) {
-                await kv.hincrby(`poll:${pollId}`, `votes${buttonId}`, 1);
+                let multi = kv.multi();
+                multi.hincrby(`poll:${pollId}`, `votes${buttonId}`, 1);
+                multi.hset(`poll:${pollId}:votes`, {[fid]: buttonId});
+                await multi.exec();
             }
 
             let poll: Poll | null = await kv.hgetall(`poll:${pollId}`);
@@ -26,7 +32,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             if (!poll) {
                 return res.status(400).send('Missing poll ID');
             }
-            const imageUrl = `${process.env['HOST']}/api/image?id=${poll.id}&results=${results ? 'false': 'true'}&date=${Date.now()}`
+            const imageUrl = `${process.env['HOST']}/api/image?id=${poll.id}&results=${results ? 'false': 'true'}&date=${Date.now()}${ fid > 0 ? `&fid=${fid}` : '' }`;
 
             // Return an HTML response
             res.setHeader('Content-Type', 'text/html');
@@ -43,8 +49,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           <meta name="fc:frame:button:1" content="${results ? "View Results" : "Back" }">
         </head>
         <body>
-          <h1>Thank you for voting!</h1>
-          <p>Your vote for "${option}" has been recorded.</p>
+          <p>${ results || voted ? `You have already voted ${votedOption}` : `Your vote for ${buttonId} has been recorded for fid ${fid}.` }</p>
         </body>
       </html>
     `);
