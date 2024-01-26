@@ -1,5 +1,5 @@
 import {kv} from "@vercel/kv";
-import {Feature, Poll} from "@/app/types";
+import {Poll} from "@/app/types";
 import Link from "next/link";
 
 const SEVEN_DAYS_IN_MS = 1000 * 60 * 60 * 24 * 7;

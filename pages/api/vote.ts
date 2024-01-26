@@ -18,8 +18,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 return res.status(400).send('Missing poll ID');
             }
 
-            // const { option } = req.body;
-
             let validatedMessage : Message | undefined = undefined;
             try {
                 const frameMessage = Message.decode(Buffer.from(req.body?.trustedData?.messageBytes || '', 'hex'));
@@ -49,7 +47,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 return res.status(400).send('Missing poll ID');
             }
             const imageUrl = `${process.env['HOST']}/api/image?id=${poll.id}&results=${results ? 'false': 'true'}&date=${Date.now()}${ fid > 0 ? `&fid=${fid}` : '' }`;
-            const button1Text =  voted && results ? "Already voted" : results ? "Back" : "View Results";
+            const button1Text =  voted && results ? "Already voted" : results ? "View Results" :  "Back";
 
             // Return an HTML response
             res.setHeader('Content-Type', 'text/html');
