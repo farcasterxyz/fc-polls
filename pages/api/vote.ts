@@ -1,6 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import {Poll} from "@/app/types";
 import {kv} from "@vercel/kv";
+import {getSSLHubRpcClient, Message} from "@farcaster/hub-nodejs";
+
+const HUB_URL = process.env['HUB_URL'] || "nemes.farcaster.xyz:2283"
+const client = getSSLHubRpcClient(HUB_URL);
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'POST') {
@@ -15,8 +19,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
 
             // const { option } = req.body;
-            const buttonId = parseInt(req.body?.untrustedData?.buttonIndex)
-            const fid = parseInt(req.body?.untrustedData?.fid)
+
+            let validatedMessage : Message | undefined = undefined;
+            try {
+                const frameMessage = Message.decode(Buffer.from(req.body?.trustedData?.messageBytes || '', 'hex'));
+                const result = await client.validateMessage(frameMessage);
+                if (result.isOk() && result.value.valid) {
+                    validatedMessage = result.value.message;
+                }
+            } catch (e)  {
+                return res.status(400).send(`Failed to validate message: ${e}`);
+            }
+
+            const buttonId = validatedMessage?.data?.frameActionBody?.buttonIndex || 0;
+            const fid = validatedMessage?.data?.fid || 0;
             const votedOption = await kv.hget(`poll:${pollId}:votes`, `${fid}`)
             voted = voted || !!votedOption
 
@@ -33,6 +49,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 return res.status(400).send('Missing poll ID');
             }
             const imageUrl = `${process.env['HOST']}/api/image?id=${poll.id}&results=${results ? 'false': 'true'}&date=${Date.now()}${ fid > 0 ? `&fid=${fid}` : '' }`;
+            const button1Text =  voted && results ? "Already voted" : results ? "Back" : "View Results";
 
             // Return an HTML response
             res.setHeader('Content-Type', 'text/html');
@@ -46,7 +63,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           <meta name="fc:frame" content="vNext">
           <meta name="fc:frame:image" content="${imageUrl}">
           <meta name="fc:frame:post_url" content="${process.env['HOST']}/api/vote?id=${poll.id}&voted=true&results=${results ? 'false' : 'true'}">
-          <meta name="fc:frame:button:1" content="${results ? "View Results" : "Back" }">
+          <meta name="fc:frame:button:1" content="${button1Text}">
         </head>
         <body>
           <p>${ results || voted ? `You have already voted ${votedOption}` : `Your vote for ${buttonId} has been recorded for fid ${fid}.` }</p>
