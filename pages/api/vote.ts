@@ -47,7 +47,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 return res.status(400).send('Missing poll ID');
             }
             const imageUrl = `${process.env['HOST']}/api/image?id=${poll.id}&results=${results ? 'false': 'true'}&date=${Date.now()}${ fid > 0 ? `&fid=${fid}` : '' }`;
-            const button1Text =  voted && results ? "Already voted" : results ? "View Results" :  "Back";
+            let button1Text = "View Results";
+            if (!voted && !results) {
+                button1Text = "Back"
+            } else if (voted && !results) {
+                button1Text = "Already Voted"
+            } else if (voted && results) {
+                button1Text = "View Results"
+            }
 
             // Return an HTML response
             res.setHeader('Content-Type', 'text/html');
