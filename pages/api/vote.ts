@@ -36,13 +36,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             // const buttonId = req.body?.untrustedData?.buttonIndex || 0;
             // const fid = req.body?.untrustedData?.fid || 0;
 
+            const voteExists = await kv.sismember(`poll:${pollId}:voted`, fid)
+            voted = voted || !!voteExists
+
             // Clicked create poll
             if ((voted || results) && buttonId === 2) {
                 return res.status(302).setHeader('Location', `${process.env['HOST']}`).send('Redirecting to create poll');
             }
-
-            const voteExists = await kv.sismember(`poll:${pollId}:voted`, fid)
-            voted = voted || !!voteExists
 
             if (fid > 0 && buttonId > 0 && buttonId < 5 && !results && !voted) {
                 let multi = kv.multi();
@@ -83,7 +83,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           <meta name="fc:frame:button:2:action" content="post_redirect">
         </head>
         <body>
-          <p>${ results || voted ? `You have already voted` : `Your vote for ${buttonId} has been recorded for fid ${fid}.` }</p>
+          <p>${ results || voted ? `You have already voted. You clicked ${buttonId}` : `Your vote for ${buttonId} has been recorded for fid ${fid}.` }</p>
         </body>
       </html>
     `);
