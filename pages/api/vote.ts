@@ -31,13 +31,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
             const buttonId = validatedMessage?.data?.frameActionBody?.buttonIndex || 0;
             const fid = validatedMessage?.data?.fid || 0;
-            const votedOption = await kv.hget(`poll:${pollId}:votes`, `${fid}`)
-            voted = voted || !!votedOption
 
-            if (buttonId > 0 && buttonId < 5 && !results && !voted) {
+            // Use untrusted data for testing
+            // const buttonId = req.body?.untrustedData?.buttonIndex || 0;
+            // const fid = req.body?.untrustedData?.fid || 0;
+
+            // Clicked create poll
+            if ((voted || results) && buttonId === 2) {
+                return res.status(302).setHeader('Location', `${process.env['HOST']}`).send('Redirecting to create poll');
+            }
+
+            const voteExists = await kv.sismember(`poll:${pollId}:voted`, fid)
+            voted = voted || !!voteExists
+
+            if (fid > 0 && buttonId > 0 && buttonId < 5 && !results && !voted) {
                 let multi = kv.multi();
                 multi.hincrby(`poll:${pollId}`, `votes${buttonId}`, 1);
-                multi.hset(`poll:${pollId}:votes`, {[fid]: buttonId});
+                multi.sadd(`poll:${pollId}:voted`, fid);
                 await multi.exec();
             }
 
@@ -69,9 +79,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           <meta name="fc:frame:image" content="${imageUrl}">
           <meta name="fc:frame:post_url" content="${process.env['HOST']}/api/vote?id=${poll.id}&voted=true&results=${results ? 'false' : 'true'}">
           <meta name="fc:frame:button:1" content="${button1Text}">
+          <meta name="fc:frame:button:2:post_redirect" content="Create your poll">
         </head>
         <body>
-          <p>${ results || voted ? `You have already voted ${votedOption}` : `Your vote for ${buttonId} has been recorded for fid ${fid}.` }</p>
+          <p>${ results || voted ? `You have already voted` : `Your vote for ${buttonId} has been recorded for fid ${fid}.` }</p>
         </body>
       </html>
     `);
