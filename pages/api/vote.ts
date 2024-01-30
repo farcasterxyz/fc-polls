@@ -29,12 +29,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 return res.status(400).send(`Failed to validate message: ${e}`);
             }
 
-            const buttonId = validatedMessage?.data?.frameActionBody?.buttonIndex || 0;
-            const fid = validatedMessage?.data?.fid || 0;
+            // const buttonId = validatedMessage?.data?.frameActionBody?.buttonIndex || 0;
+            // const fid = validatedMessage?.data?.fid || 0;
 
             // Use untrusted data for testing
-            // const buttonId = req.body?.untrustedData?.buttonIndex || 0;
-            // const fid = req.body?.untrustedData?.fid || 0;
+            const buttonId = req.body?.untrustedData?.buttonIndex || 0;
+            const fid = req.body?.untrustedData?.fid || 0;
 
             const voteExists = await kv.sismember(`poll:${pollId}:voted`, fid)
             voted = voted || !!voteExists
