@@ -29,7 +29,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 // Also validate the frame url matches the expected url
                 let urlBuffer = validatedMessage?.data?.frameActionBody?.url || [];
                 const urlString = Buffer.from(urlBuffer).toString('utf-8');
-                if (urlString !== process.env['HOST']) {
+                if (!urlString.startsWith(process.env['HOST'] || '')) {
                     return res.status(400).send(`Invalid frame url: ${urlBuffer}`);
                 }
             } catch (e)  {
