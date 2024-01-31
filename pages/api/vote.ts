@@ -43,13 +43,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             // const buttonId = req.body?.untrustedData?.buttonIndex || 0;
             // const fid = req.body?.untrustedData?.fid || 0;
 
-            const voteExists = await kv.sismember(`poll:${pollId}:voted`, fid)
-            voted = voted || !!voteExists
-
             // Clicked create poll
-            if (results && buttonId === 2) {
+            if ((results || voted) && buttonId === 2) {
                 return res.status(302).setHeader('Location', `${process.env['HOST']}`).send('Redirecting to create poll');
             }
+
+
+            const voteExists = await kv.sismember(`poll:${pollId}:voted`, fid)
+            voted = voted || !!voteExists
 
             if (fid > 0 && buttonId > 0 && buttonId < 5 && !results && !voted) {
                 let multi = kv.multi();
