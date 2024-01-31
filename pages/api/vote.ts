@@ -25,6 +25,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 if (result.isOk() && result.value.valid) {
                     validatedMessage = result.value.message;
                 }
+
+                // Also validate the frame url matches the expected url
+                let urlBuffer = validatedMessage?.data?.frameActionBody?.url || [];
+                const urlString = Buffer.from(urlBuffer).toString('utf-8');
+                if (urlString !== process.env['HOST']) {
+                    return res.status(400).send(`Invalid frame url: ${urlBuffer}`);
+                }
             } catch (e)  {
                 return res.status(400).send(`Failed to validate message: ${e}`);
             }
@@ -40,7 +47,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             voted = voted || !!voteExists
 
             // Clicked create poll
-            if ((voted || results) && buttonId === 2) {
+            if (results && buttonId === 2) {
                 return res.status(302).setHeader('Location', `${process.env['HOST']}`).send('Redirecting to create poll');
             }
 
