@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import {Poll} from "@/app/types";
+import {Poll, POLL_EXPIRY} from "@/app/types";
 import {kv} from "@vercel/kv";
 import {getSSLHubRpcClient, Message} from "@farcaster/hub-nodejs";
 
@@ -58,6 +58,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 let multi = kv.multi();
                 multi.hincrby(`poll:${pollId}`, `votes${buttonId}`, 1);
                 multi.sadd(`poll:${pollId}:voted`, fid);
+                multi.expire(`poll:${pollId}`, POLL_EXPIRY);
+                multi.expire(`poll:${pollId}:voted`, POLL_EXPIRY);
                 await multi.exec();
             }
 

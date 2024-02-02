@@ -6,7 +6,7 @@ const SEVEN_DAYS_IN_MS = 1000 * 60 * 60 * 24 * 7;
 
 async function getPolls() {
     try {
-        let pollIds = await kv.zrange("polls_by_date", Date.now(), Date.now() - SEVEN_DAYS_IN_MS, {byScore: true, rev: true});
+        let pollIds = await kv.zrange("polls_by_date", Date.now(), Date.now() - SEVEN_DAYS_IN_MS, {byScore: true, rev: true, count: 100, offset: 0});
 
         if (!pollIds.length) {
             return [];

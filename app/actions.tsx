@@ -2,7 +2,7 @@
 
 import { kv } from "@vercel/kv";
 import { revalidatePath } from "next/cache";
-import {Poll} from "./types";
+import {Poll, POLL_EXPIRY} from "./types";
 import {redirect} from "next/navigation";
 
 export async function savePoll(poll: Poll, formData: FormData) {
@@ -16,6 +16,7 @@ export async function savePoll(poll: Poll, formData: FormData) {
     option4: formData.get("option4") as string,
   }
   await kv.hset(`poll:${poll.id}`, poll);
+  await kv.expire(`poll:${poll.id}`, POLL_EXPIRY);
   await kv.zadd("polls_by_date", {
     score: Number(poll.created_at),
     member: newPoll.id,
