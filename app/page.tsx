@@ -1,8 +1,8 @@
 import {PollCreateForm} from "./form";
 
 export let metadata = {
-  title: "Farcaster polls",
-  description: "Poll example for farcaster",
+  title: "Farcaster market price prediction poll",
+  description: "Vote to help community be aware of the Market sentiment - No financial operation related",
 };
 
 function VercelLogo(props: React.SVGProps<SVGSVGElement>) {
@@ -34,7 +34,7 @@ export default async function Page() {
           <VercelLogo className="h-8 sm:h-16 invert p-3 mb-1" />
         </div>
         <h1 className="text-lg sm:text-2xl font-bold mb-2">
-          Farcaster Polls
+          Farcaster Market Price Prediction Poll
         </h1>
         <h2 className="text-md sm:text-xl mx-4">
           Create a new poll with upto 4 options

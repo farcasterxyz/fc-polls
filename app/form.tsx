@@ -34,8 +34,11 @@ export function PollCreateForm() {
 
   let pollStub = {
     id: uuidv4(),
-    created_at: new Date().getTime(),
+    created_at: new Date().getTime(), // in ms
+    period: 24 * 3600 * 1000, // 1 day in ms
     title: "",
+    description: "",
+    status: "open",
     option1: "",
     option2: "",
     option3: "",

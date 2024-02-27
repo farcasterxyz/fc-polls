@@ -16,3 +16,4 @@ This example lets you create a market pridiction poll and have users vote on it.
 - Navigate to env variables: https://vercel.com/gregan/fc-links-vote/settings/environment-variables
 - If you're doing something production facing w/ trusted data, set the `HUB_URL` environment variable to a production hub's public ip address port 2283 ref: https://docs.farcaster.xyz/reference/frames/spec#frame-signature-packet
 - Set the `HOST` env variable to your public facing url or domain, ie; `https://<project>.vercel.app/`
+- Redeploy the project to enable environment varibles.
