@@ -1,14 +1,12 @@
-# Farcaster Frames Poll app
+# Farcaster Frames Market Price Prediction app
 
-A example Poll app using [Farcaster Frames](https://warpcast.notion.site/Farcaster-Frames-4bd47fe97dc74a42a48d3a234636d8c5). 
+A example Market Price Prediction app using [Farcaster Frames](https://warpcast.notion.site/Farcaster-Frames-4bd47fe97dc74a42a48d3a234636d8c5). 
 
-This example lets you create a poll and have users vote on it. The FrameAction is authenticated against a hub 
-so the votes cannot be spoofed (if `HUB_URL` is provided), and the results are stored in a redis database. 
-
+This example lets you create a market pridiction poll and have users vote on it. Those who win the prediction will be rewarded an NFT after checking the price from oracle. 
 
 ## Demo
 
-- [https://fc-polls.vercel.app/](https://fc-polls.vercel.app/)
+- [https://fc-market-price-polls.vercel.app/](https://fc-market-price-polls.vercel.app/)
 
 
 ## Setup
