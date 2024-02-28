@@ -1,10 +1,12 @@
-import {PollCreateForm} from "./form";
+import { PollCreateForm } from "./form";
 
 export let metadata = {
-  title: "Farcaster market price prediction poll",
-  description: "Vote to help community be aware of the Market sentiment - No financial operation related",
+  title: "Farcaster Market Price Prediction Poll",
+  description:
+    "Vote to help the community be aware of market sentiment. No financial operation related.",
 };
 
+// Vercel Logo as a React Component
 function VercelLogo(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
@@ -26,23 +28,28 @@ function VercelLogo(props: React.SVGProps<SVGSVGElement>) {
   );
 }
 
-export default async function Page() {
+// Main Page Component
+export default function Page() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-2">
-      <main className="flex flex-col items-center justify-center flex-1 px-4 sm:px-20 text-center">
-        <div className="flex justify-center items-center bg-black rounded-full w-16 sm:w-24 h-16 sm:h-24 my-8">
-          <VercelLogo className="h-8 sm:h-16 invert p-3 mb-1" />
+    <div className="bg-gradient-to-r from-blue-500 to-teal-500 min-h-screen flex flex-col items-center justify-center text-white">
+      <header className="p-5">
+        <div className="flex justify-center items-center bg-opacity-20 bg-white rounded-full w-20 h-20 mb-5">
+          <VercelLogo className="w-12 h-12" fill="white" />
         </div>
-        <h1 className="text-lg sm:text-2xl font-bold mb-2">
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4">
           Farcaster Market Price Prediction Poll
         </h1>
-        <h2 className="text-md sm:text-xl mx-4">
-          Create a new poll with upto 4 options
+        <h2 className="text-md sm:text-lg lg:text-xl">
+          Create a new poll with up to 4 options
         </h2>
-        <div className="flex flex-wrap items-center justify-around max-w-4xl my-8 sm:w-full bg-white rounded-md shadow-xl h-full border border-gray-100">
-          <PollCreateForm />
-        </div>
+      </header>
+      <main className="bg-white bg-opacity-20 backdrop-blur-md rounded-xl shadow-2xl p-6 sm:p-12 text-center max-w-4xl w-full">
+        <PollCreateForm />
       </main>
+      <footer className="text-sm text-gray-300 mt-10">
+        Remember, your vote helps the community gauge market sentiment. Let's
+        predict together!
+      </footer>
     </div>
   );
 }
