@@ -2,11 +2,12 @@
 
 import { kv } from '@vercel/kv';
 import { revalidatePath } from 'next/cache';
-import { Poll, POLL_EXPIRY } from './types';
 import { redirect } from 'next/navigation';
 
+import { Poll, POLL_EXPIRY } from '@/app/types';
+
 export async function savePoll(poll: Poll, formData: FormData) {
-    let newPoll = {
+    const newPoll = {
         ...poll,
         created_at: Date.now(),
         title: formData.get('title') as string,

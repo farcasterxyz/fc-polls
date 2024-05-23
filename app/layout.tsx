@@ -1,4 +1,5 @@
-import './globals.css';
+import '@/../app/globals.css';
+
 import { GeistSans } from 'geist/font/sans';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

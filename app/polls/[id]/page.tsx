@@ -1,12 +1,13 @@
 import { kv } from '@vercel/kv';
-import { Poll } from '@/app/types';
-import { PollVoteForm } from '@/app/form';
-import Head from 'next/head';
 import { Metadata, ResolvingMetadata } from 'next';
+import Head from 'next/head';
+
+import { PollVoteForm } from '@/app/form';
+import { Poll } from '@/app/types';
 import { DEFAULT_VALID_IN_DAYS } from '@/constants';
 
 async function getPoll(id: string): Promise<Poll> {
-    let nullPoll = {
+    const nullPoll = {
         id: '',
         title: 'No poll found',
         option1: '',
@@ -22,7 +23,7 @@ async function getPoll(id: string): Promise<Poll> {
     };
 
     try {
-        let poll: Poll | null = await kv.hgetall(`poll:${id}`);
+        const poll: Poll | null = await kv.hgetall(`poll:${id}`);
 
         if (!poll) {
             return nullPoll;
@@ -47,8 +48,8 @@ export async function generateMetadata({ params, searchParams }: Props, parent: 
 
     const fcMetadata: Record<string, string> = {
         'fc:frame': 'vNext',
-        'fc:frame:post_url': `${process.env['HOST']}/api/vote?id=${id}`,
-        'fc:frame:image': `${process.env['HOST']}/api/image?id=${id}`,
+        'fc:frame:post_url': `${process.env.HOST}/api/vote?id=${id}`,
+        'fc:frame:image': `${process.env.HOST}/api/image?id=${id}`,
     };
     [poll.option1, poll.option2, poll.option3, poll.option4]
         .filter((o) => o !== '')
@@ -65,14 +66,14 @@ export async function generateMetadata({ params, searchParams }: Props, parent: 
         other: {
             ...fcMetadata,
         },
-        metadataBase: new URL(process.env['HOST'] || ''),
+        metadataBase: new URL(process.env.HOST || ''),
     };
 }
 function getMeta(poll: Poll) {
     // This didn't work for some reason
     return (
         <Head>
-            <meta property="og:image" content="" key="test"></meta>
+            <meta property="og:image" content="" key="test" />
             <meta property="og:title" content="My page title" key="title" />
         </Head>
     );

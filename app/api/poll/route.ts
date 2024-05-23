@@ -1,3 +1,7 @@
+import { NextRequest } from 'next/server';
+import { v4 as uuid } from 'uuid';
+import { z } from 'zod';
+
 import { ComposedPoll } from '@/app/types';
 import {
     MAX_TITLE_CHARS_PEER_POLL,
@@ -9,9 +13,6 @@ import {
 import { createErrorResponseJSON } from '@/helpers/createErrorResponseJSON';
 import { createSuccessResponseJSON } from '@/helpers/createSuccessResponseJSON';
 import { savePollToDb } from '@/helpers/savePollToDb';
-import { z } from 'zod';
-import { v4 as uuid } from 'uuid';
-import { NextRequest } from 'next/server';
 
 const PollSchema = z.object({
     text: z

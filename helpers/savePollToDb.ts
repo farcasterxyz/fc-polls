@@ -1,5 +1,6 @@
-import { ComposedPoll } from '@/app/types';
 import { kv } from '@vercel/kv';
+
+import { ComposedPoll } from '@/app/types';
 
 export const savePollToDb = async (poll: ComposedPoll) => {
     await kv.hset(`poll:${poll.id}`, poll);

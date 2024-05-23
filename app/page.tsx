@@ -1,6 +1,6 @@
-import { PollCreateForm } from './form';
+import { PollCreateForm } from '@/../app/form';
 
-export let metadata = {
+export const metadata = {
     title: 'Farcaster polls',
     description: 'Poll example for farcaster',
 };
