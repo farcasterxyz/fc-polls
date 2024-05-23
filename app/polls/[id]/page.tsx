@@ -31,7 +31,7 @@ async function getPoll(id: string): Promise<Poll> {
 
         return poll;
     } catch (error) {
-        console.error(error);
+        console.error(`[poll]: failed to read poll: ${id}.`, error);
         return nullPoll;
     }
 }

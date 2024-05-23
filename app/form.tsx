@@ -10,12 +10,12 @@ import { redirectToPolls, savePoll, votePoll } from '@/app/actions';
 import { Poll } from '@/app/types';
 import { MIN_VALID_IN_DAYS } from '@/constants';
 
-type PollState = {
+interface PollState {
     newPoll: Poll;
     updatedPoll?: Poll;
     pending: boolean;
     voted?: boolean;
-};
+}
 
 export function PollCreateForm() {
     const formRef = useRef<HTMLFormElement>(null);

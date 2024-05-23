@@ -28,7 +28,7 @@ async function getPolls() {
             return { ...item };
         });
     } catch (error) {
-        console.error(error);
+        console.error('[poll]: failed to read polls.');
         return [];
     }
 }
