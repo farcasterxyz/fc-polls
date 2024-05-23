@@ -4,11 +4,12 @@ import { z } from 'zod';
 
 import { ComposedPoll } from '@/app/types';
 import {
-    MAX_TITLE_CHARS_PEER_POLL,
+    MAX_CHARS_POLL_TITLE,
     MAX_VALID_IN_DAYS,
+    MIN_VALID_IN_DAYS,
     POLL_OPTIONS_MAX_COUNT,
     POLL_OPTIONS_MIN_COUNT,
-    POLL_PEER_OPTION_MAX_CHARS,
+    MAX_CHARS_POLL_OPTION,
 } from '@/constants';
 import { createErrorResponseJSON } from '@/helpers/createErrorResponseJSON';
 import { createSuccessResponseJSON } from '@/helpers/createSuccessResponseJSON';
@@ -18,8 +19,8 @@ const PollSchema = z.object({
     text: z
         .string()
         .trim()
-        .min(1, 'Poll title must be at least 1 character')
-        .max(MAX_TITLE_CHARS_PEER_POLL, `Poll title must be less than ${MAX_TITLE_CHARS_PEER_POLL} characters`),
+        .min(1, 'Poll title must be not empty.')
+        .max(MAX_CHARS_POLL_TITLE, `Poll title must be less than ${MAX_CHARS_POLL_TITLE} characters.`),
     poll: z.object({
         id: z.string(),
         options: z
@@ -29,16 +30,16 @@ const PollSchema = z.object({
                     label: z
                         .string()
                         .trim()
-                        .min(1, 'Poll option must be at least 1 character')
+                        .min(1, 'Poll option must be not empty.')
                         .max(
-                            POLL_PEER_OPTION_MAX_CHARS,
-                            `Poll option must be less than ${POLL_PEER_OPTION_MAX_CHARS} characters`,
+                            MAX_CHARS_POLL_OPTION,
+                            `Poll option must be less than ${MAX_CHARS_POLL_OPTION} characters.`,
                         ),
                 }),
             )
-            .min(POLL_OPTIONS_MIN_COUNT, `Poll must have at least ${POLL_OPTIONS_MIN_COUNT} options`)
-            .max(POLL_OPTIONS_MAX_COUNT, `Poll must have at most ${POLL_OPTIONS_MAX_COUNT} options`),
-        validInDays: z.number().int().positive().min(1).max(MAX_VALID_IN_DAYS),
+            .min(POLL_OPTIONS_MIN_COUNT, `Poll must have at least ${POLL_OPTIONS_MIN_COUNT} options.`)
+            .max(POLL_OPTIONS_MAX_COUNT, `Poll must have at most ${POLL_OPTIONS_MAX_COUNT} options.`),
+        validInDays: z.number().int().positive().min(MIN_VALID_IN_DAYS).max(MAX_VALID_IN_DAYS),
     }),
 });
 
@@ -61,9 +62,10 @@ const composePoll = (pollData: z.infer<typeof PollSchema>): ComposedPoll => {
 
 export async function POST(request: NextRequest) {
     try {
-        const parsedPoll = PollSchema.safeParse(await request.json());
-        if (!parsedPoll.success) throw new Error(parsedPoll.error.message);
-        const { pollId } = await savePollToDb(composePoll(parsedPoll.data));
+        const parsed = PollSchema.safeParse(await request.json());
+        if (!parsed.success) throw new Error(parsed.error.message);
+
+        const { pollId } = await savePollToDb(composePoll(parsed.data));
         return createSuccessResponseJSON({ pollId });
     } catch (error) {
         if (error instanceof Error) {
