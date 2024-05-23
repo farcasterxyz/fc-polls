@@ -1,11 +1,8 @@
 {
     "version": "0.1",
     "language": "en",
-    "words": [
-        "farcaster"
-    ],
-    "ignoreWords": [
-    ],
+    "words": ["farcaster"],
+    "ignoreWords": [],
     "flagWords": [],
     "ignorePaths": [
         "package-lock.json",

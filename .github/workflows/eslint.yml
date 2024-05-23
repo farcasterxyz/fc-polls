@@ -1,0 +1,43 @@
+name: ESLint
+
+on:
+  push:
+    branches:
+      - '**'
+      - '!main'
+      - '!released'
+jobs:
+  eslint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          submodules: 'true'
+
+      - name: Authenticate NPM
+        uses: DimensionDev/github-token-action@latest
+        with:
+          registry: true
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version-file: '.node-version'
+
+      - uses: pnpm/action-setup@v2
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Run ESLint
+        run: npx eslint --fix .
+
+      - name: Check for changes in src/*
+        id: check-changes
+        run: echo "::set-output name=changes::$(git diff --name-only -- 'src/*')"
+
+      - name: Commit changes if any
+        uses: EndBug/add-and-commit@v9
+        with:
+          message: 'chore: eslint'
