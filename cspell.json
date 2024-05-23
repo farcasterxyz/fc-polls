@@ -5,7 +5,7 @@
     "ignoreWords": [],
     "flagWords": [],
     "ignorePaths": [
-        "package-lock.json",
+        "pnpm-lock.yaml",
         "tests/**",
         "package.json",
         "cspell.json",
