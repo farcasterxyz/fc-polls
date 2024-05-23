@@ -10,10 +10,10 @@ export type Poll = {
     votes3: number;
     votes4: number;
     created_at: number;
-    validIndays: number;
+    validInDays: number;
 };
 
-export type ComposedPoll = Pick<Poll, 'id' | 'title' | 'created_at' | 'validIndays'> & {
+export type ComposedPoll = Pick<Poll, 'id' | 'title' | 'created_at' | 'validInDays'> & {
     [key: `option${number}`]: string;
     [key: `votes${number}`]: number;
 };

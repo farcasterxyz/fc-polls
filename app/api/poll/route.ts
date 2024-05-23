@@ -47,7 +47,7 @@ const composePoll = (pollData: z.infer<typeof PollSchema>): ComposedPoll => {
         id: uuid(),
         title: text,
         created_at: Date.now(),
-        validIndays: poll.validInDays,
+        validInDays: poll.validInDays,
         ...poll.options.reduce((result, option, index) => {
             return {
                 ...result,

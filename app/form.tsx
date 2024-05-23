@@ -3,7 +3,7 @@
 import clsx from 'clsx';
 import { useOptimistic, useRef, useState, useTransition } from 'react';
 import { redirectToPolls, savePoll, votePoll } from './actions';
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuid } from 'uuid';
 import { Poll } from './types';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { DEFAULT_VALID_IN_DAYS } from '@/constants';
@@ -30,7 +30,7 @@ export function PollCreateForm() {
     });
 
     let pollStub = {
-        id: uuidv4(),
+        id: uuid(),
         created_at: new Date().getTime(),
         title: '',
         option1: '',
@@ -41,7 +41,7 @@ export function PollCreateForm() {
         votes2: 0,
         votes3: 0,
         votes4: 0,
-        validIndays: DEFAULT_VALID_IN_DAYS,
+        validInDays: DEFAULT_VALID_IN_DAYS,
     };
     let saveWithNewPoll = savePoll.bind(null, pollStub);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -83,7 +83,7 @@ export function PollCreateForm() {
                 >
                     <input
                         aria-label="Poll Title"
-                        className="pl-3 pr-28 py-3 mt-1 text-lg block w-full border border-gray-200 rounded-md text-gray-900 placeholder-gray-400 focus:outline-none focus:ring focus:ring-blue-300"
+                        className="mt-1 block w-full rounded-md border border-gray-200 py-3 pl-3 pr-28 text-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring focus:ring-blue-300"
                         maxLength={150}
                         placeholder="Title..."
                         required
@@ -92,7 +92,7 @@ export function PollCreateForm() {
                     />
                     <input
                         aria-label="Option 1"
-                        className="pl-3 pr-28 py-3 mt-1 text-lg block w-full border border-gray-200 rounded-md text-gray-900 placeholder-gray-400 focus:outline-none focus:ring focus:ring-blue-300"
+                        className="mt-1 block w-full rounded-md border border-gray-200 py-3 pl-3 pr-28 text-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring focus:ring-blue-300"
                         maxLength={150}
                         placeholder="Option 1"
                         required
@@ -101,7 +101,7 @@ export function PollCreateForm() {
                     />
                     <input
                         aria-label="Option 2"
-                        className="pl-3 pr-28 py-3 mt-1 text-lg block w-full border border-gray-200 rounded-md text-gray-900 placeholder-gray-400 focus:outline-none focus:ring focus:ring-blue-300"
+                        className="mt-1 block w-full rounded-md border border-gray-200 py-3 pl-3 pr-28 text-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring focus:ring-blue-300"
                         maxLength={150}
                         placeholder="Option 2"
                         required
@@ -110,7 +110,7 @@ export function PollCreateForm() {
                     />
                     <input
                         aria-label="Option 3"
-                        className="pl-3 pr-28 py-3 mt-1 text-lg block w-full border border-gray-200 rounded-md text-gray-900 placeholder-gray-400 focus:outline-none focus:ring focus:ring-blue-300"
+                        className="mt-1 block w-full rounded-md border border-gray-200 py-3 pl-3 pr-28 text-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring focus:ring-blue-300"
                         maxLength={150}
                         placeholder="Option 3 (optional)"
                         type="text"
@@ -118,17 +118,17 @@ export function PollCreateForm() {
                     />
                     <input
                         aria-label="Option 4"
-                        className="pl-3 pr-28 py-3 mt-1 text-lg block w-full border border-gray-200 rounded-md text-gray-900 placeholder-gray-400 focus:outline-none focus:ring focus:ring-blue-300"
+                        className="mt-1 block w-full rounded-md border border-gray-200 py-3 pl-3 pr-28 text-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring focus:ring-blue-300"
                         maxLength={150}
                         placeholder="Option 4 (optional)"
                         type="text"
                         name="option4"
                     />
-                    <div className={'pt-2 flex justify-end'}>
+                    <div className={'flex justify-end pt-2'}>
                         <button
                             className={clsx(
-                                'flex items-center p-1 justify-center px-4 h-10 text-lg border bg-blue-500 text-white rounded-md w-24 focus:outline-none focus:ring focus:ring-blue-300 hover:bg-blue-700 focus:bg-blue-700',
-                                state.pending && 'bg-gray-700 cursor-not-allowed',
+                                'flex h-10 w-24 items-center justify-center rounded-md border bg-blue-500 p-1 px-4 text-lg text-white hover:bg-blue-700 focus:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300',
+                                state.pending && 'cursor-not-allowed bg-gray-700',
                             )}
                             type="submit"
                             disabled={state.pending}
@@ -200,8 +200,8 @@ export function PollVoteForm({ poll, viewResults }: { poll: Poll; viewResults?: 
     };
 
     return (
-        <div className="max-w-sm rounded overflow-hidden shadow-lg p-4 m-4">
-            <div className="font-bold text-xl mb-2">{poll.title}</div>
+        <div className="m-4 max-w-sm overflow-hidden rounded p-4 shadow-lg">
+            <div className="mb-2 text-xl font-bold">{poll.title}</div>
             <form
                 className="relative my-8"
                 ref={formRef}
@@ -232,7 +232,7 @@ export function PollVoteForm({ poll, viewResults }: { poll: Poll; viewResults?: 
                 {state.showResults ? <PollResults poll={poll} /> : <PollOptions poll={poll} onChange={handleVote} />}
                 {state.showResults ? (
                     <button
-                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                        className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
                         type="submit"
                     >
                         Back
@@ -240,7 +240,7 @@ export function PollVoteForm({ poll, viewResults }: { poll: Poll; viewResults?: 
                 ) : (
                     <button
                         className={
-                            'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' +
+                            'rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700' +
                             (selectedOption < 1 ? ' cursor-not-allowed' : '')
                         }
                         type="submit"

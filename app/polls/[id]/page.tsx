@@ -18,7 +18,7 @@ async function getPoll(id: string): Promise<Poll> {
         votes3: 0,
         votes4: 0,
         created_at: 0,
-        validIndays: DEFAULT_VALID_IN_DAYS,
+        validInDays: DEFAULT_VALID_IN_DAYS,
     };
 
     try {
@@ -83,8 +83,8 @@ export default async function Page({ params }: { params: { id: string } }) {
 
     return (
         <>
-            <div className="flex flex-col items-center justify-center min-h-screen py-2">
-                <main className="flex flex-col items-center justify-center flex-1 px-4 sm:px-20 text-center">
+            <div className="flex min-h-screen flex-col items-center justify-center py-2">
+                <main className="flex flex-1 flex-col items-center justify-center px-4 text-center sm:px-20">
                     <PollVoteForm poll={poll} />
                 </main>
             </div>

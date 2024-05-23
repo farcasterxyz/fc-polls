@@ -11,6 +11,7 @@
     "requirePragma": false,
     "proseWrap": "preserve",
     "endOfLine": "auto",
+    "plugins": ["prettier-plugin-tailwindcss"],
     "overrides": [
         {
             "files": "*.md",

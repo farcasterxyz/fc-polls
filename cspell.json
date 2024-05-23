@@ -1,0 +1,25 @@
+{
+    "version": "0.1",
+    "language": "en",
+    "words": [
+        "farcaster"
+    ],
+    "ignoreWords": [
+    ],
+    "flagWords": [],
+    "ignorePaths": [
+        "package-lock.json",
+        "tests/**",
+        "package.json",
+        "cspell.json",
+        "node_modules/**",
+        "dist/**",
+        "build/**",
+        ".next/**",
+        "public/**",
+        "src/assets/**",
+        "src/locales/**",
+        "LICENSE"
+    ],
+    "overrides": []
+}
