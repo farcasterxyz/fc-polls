@@ -5,7 +5,7 @@ import { createSuccessResponseJSON } from '@/helpers/createSuccessResponseJSON';
 import { savePollToDb } from '@/helpers/savePollToDb';
 import { z } from 'zod';
 import { v4 as uuid } from 'uuid';
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 const PollSchema = z.object({
     text: z.string()
@@ -57,6 +57,10 @@ const composePoll = (pollData: z.infer<typeof PollSchema>): ComposedPoll => {
             }
         }, {}))
     };
+}
+
+export async function OPTIONS() {
+    return NextResponse.next();
 }
 
 export async function POST(request: NextRequest) {
