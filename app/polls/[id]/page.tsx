@@ -3,6 +3,7 @@ import {Poll} from "@/app/types";
 import {PollVoteForm} from "@/app/form";
 import Head from "next/head";
 import {Metadata, ResolvingMetadata} from "next";
+import { DEFAULT_VALID_IN_DAYS } from "@/constants";
 
 async function getPoll(id: string): Promise<Poll> {
     let nullPoll = {
@@ -17,6 +18,7 @@ async function getPoll(id: string): Promise<Poll> {
         votes3: 0,
         votes4: 0,
         created_at: 0,
+        validIndays: DEFAULT_VALID_IN_DAYS,
     };
 
     try {
