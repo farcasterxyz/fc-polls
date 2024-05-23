@@ -4,12 +4,12 @@ import { z } from 'zod';
 
 import { ComposedPoll } from '@/app/types';
 import {
+    MAX_CHARS_POLL_OPTION,
     MAX_CHARS_POLL_TITLE,
     MAX_VALID_IN_DAYS,
     MIN_VALID_IN_DAYS,
     POLL_OPTIONS_MAX_COUNT,
     POLL_OPTIONS_MIN_COUNT,
-    MAX_CHARS_POLL_OPTION,
 } from '@/constants';
 import { createErrorResponseJSON } from '@/helpers/createErrorResponseJSON';
 import { createSuccessResponseJSON } from '@/helpers/createSuccessResponseJSON';
