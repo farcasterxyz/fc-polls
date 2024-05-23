@@ -8,7 +8,7 @@ import { v4 as uuid } from 'uuid';
 
 import { redirectToPolls, savePoll, votePoll } from '@/app/actions';
 import { Poll } from '@/app/types';
-import { DEFAULT_VALID_IN_DAYS } from '@/constants';
+import { MIN_VALID_IN_DAYS } from '@/constants';
 
 type PollState = {
     newPoll: Poll;
@@ -43,7 +43,7 @@ export function PollCreateForm() {
         votes2: 0,
         votes3: 0,
         votes4: 0,
-        validInDays: DEFAULT_VALID_IN_DAYS,
+        validInDays: MIN_VALID_IN_DAYS,
     };
     const saveWithNewPoll = savePoll.bind(null, pollStub);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

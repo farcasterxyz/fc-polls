@@ -4,7 +4,7 @@ import Head from 'next/head';
 
 import { PollVoteForm } from '@/app/form';
 import { Poll } from '@/app/types';
-import { DEFAULT_VALID_IN_DAYS } from '@/constants';
+import { MIN_VALID_IN_DAYS } from '@/constants';
 
 async function getPoll(id: string): Promise<Poll> {
     const nullPoll = {
@@ -19,7 +19,7 @@ async function getPoll(id: string): Promise<Poll> {
         votes3: 0,
         votes4: 0,
         created_at: 0,
-        validInDays: DEFAULT_VALID_IN_DAYS,
+        validInDays: MIN_VALID_IN_DAYS,
     };
 
     try {
