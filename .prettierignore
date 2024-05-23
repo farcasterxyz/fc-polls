@@ -1,0 +1,12 @@
+# Ignore entire directories
+node_modules/
+dist/
+build/
+
+.next/
+
+# Ignore specific files
+*.min.js
+*.min.css
+
+package-lock.json

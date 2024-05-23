@@ -1,5 +1,11 @@
 import { ComposedPoll } from '@/app/types';
-import { MAX_TITLE_CHARS_PEER_POLL, MAX_VALID_IN_DAYS, POLL_OPTIONS_MAX_COUNT, POLL_OPTIONS_MIN_COUNT, POLL_PEER_OPTION_MAX_CHARS } from '@/constants';
+import {
+    MAX_TITLE_CHARS_PEER_POLL,
+    MAX_VALID_IN_DAYS,
+    POLL_OPTIONS_MAX_COUNT,
+    POLL_OPTIONS_MIN_COUNT,
+    POLL_PEER_OPTION_MAX_CHARS,
+} from '@/constants';
 import { createErrorResponseJSON } from '@/helpers/createErrorResponseJSON';
 import { createSuccessResponseJSON } from '@/helpers/createSuccessResponseJSON';
 import { savePollToDb } from '@/helpers/savePollToDb';
@@ -8,13 +14,11 @@ import { v4 as uuid } from 'uuid';
 import { NextRequest } from 'next/server';
 
 const PollSchema = z.object({
-    text: z.string()
+    text: z
+        .string()
         .trim()
         .min(1, 'Poll title must be at least 1 character')
-        .max(
-        MAX_TITLE_CHARS_PEER_POLL,
-        `Poll title must be less than ${MAX_TITLE_CHARS_PEER_POLL} characters`,
-    ),
+        .max(MAX_TITLE_CHARS_PEER_POLL, `Poll title must be less than ${MAX_TITLE_CHARS_PEER_POLL} characters`),
     poll: z.object({
         id: z.string(),
         options: z
@@ -33,13 +37,8 @@ const PollSchema = z.object({
             )
             .min(POLL_OPTIONS_MIN_COUNT, `Poll must have at least ${POLL_OPTIONS_MIN_COUNT} options`)
             .max(POLL_OPTIONS_MAX_COUNT, `Poll must have at most ${POLL_OPTIONS_MAX_COUNT} options`),
-        validInDays: z
-            .number()
-            .int()
-            .positive()
-            .min(1)
-            .max(MAX_VALID_IN_DAYS),
-    })
+        validInDays: z.number().int().positive().min(1).max(MAX_VALID_IN_DAYS),
+    }),
 });
 
 const composePoll = (pollData: z.infer<typeof PollSchema>): ComposedPoll => {
@@ -49,15 +48,15 @@ const composePoll = (pollData: z.infer<typeof PollSchema>): ComposedPoll => {
         title: text,
         created_at: Date.now(),
         validIndays: poll.validInDays,
-        ...(poll.options.reduce((result, option, index) => {
+        ...poll.options.reduce((result, option, index) => {
             return {
                 ...result,
                 [`option${index + 1}`]: option.label,
                 [`votes${index + 1}`]: 0,
-            }
-        }, {}))
+            };
+        }, {}),
     };
-}
+};
 
 export async function POST(request: NextRequest) {
     try {
@@ -66,7 +65,7 @@ export async function POST(request: NextRequest) {
         const { pollId } = await savePollToDb(composePoll(parsedPoll.data));
         return createSuccessResponseJSON({ pollId });
     } catch (error) {
-        if (error instanceof Error){
+        if (error instanceof Error) {
             return createErrorResponseJSON(error.message);
         } else {
             return createErrorResponseJSON('unknown error');
