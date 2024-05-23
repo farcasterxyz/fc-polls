@@ -6,6 +6,7 @@ import {redirectToPolls, savePoll, votePoll} from "./actions";
 import { v4 as uuidv4 } from "uuid";
 import {Poll} from "./types";
 import {useRouter, useSearchParams} from "next/navigation";
+import { DEFAULT_VALID_IN_DAYS } from "@/constants";
 
 type PollState = {
   newPoll: Poll;
@@ -44,6 +45,7 @@ export function PollCreateForm() {
     votes2: 0,
     votes3: 0,
     votes4: 0,
+    validIndays: DEFAULT_VALID_IN_DAYS,
   };
   let saveWithNewPoll = savePoll.bind(null, pollStub);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

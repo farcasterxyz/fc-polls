@@ -1,9 +1,11 @@
 import { getReasonPhrase, StatusCodes } from 'http-status-codes';
-import { NextApiResponse } from 'next';
 
-export function createResponseJSON(data: unknown, res: NextApiResponse, init?: ResponseInit) {
+export function createResponseJSON(data: unknown, init?: ResponseInit) {
     const status = init?.status ?? StatusCodes.OK;
 
-    return res.status(status)
-        .json(data);
+    return Response.json(data, {
+        status,
+        statusText: getReasonPhrase(status),
+        headers: init?.headers,
+    });
 }
