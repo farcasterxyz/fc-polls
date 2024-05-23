@@ -2,17 +2,7 @@
     "version": "0.1",
     "language": "en",
     "words": ["farcaster"],
-    "ignoreWords": [
-        "hset",
-        "hget",
-        "zadd",
-        "hincrby",
-        "hgetall",
-        "zrange",
-        "sismember",
-        "hincrby",
-        "sadd"
-    ],
+    "ignoreWords": ["hset", "hget", "zadd", "hincrby", "hgetall", "zrange", "sismember", "hincrby", "sadd"],
     "flagWords": [],
     "ignorePaths": [
         "pnpm-lock.yaml",

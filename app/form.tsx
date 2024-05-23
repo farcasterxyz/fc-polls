@@ -1,6 +1,7 @@
 'use client';
 
 import clsx from 'clsx';
+import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useOptimistic, useRef, useState, useTransition } from 'react';
 import { v4 as uuid } from 'uuid';
@@ -8,7 +9,6 @@ import { v4 as uuid } from 'uuid';
 import { redirectToPolls, savePoll, votePoll } from '@/app/actions';
 import { Poll } from '@/app/types';
 import { DEFAULT_VALID_IN_DAYS } from '@/constants';
-import Image from 'next/image';
 
 type PollState = {
     newPoll: Poll;

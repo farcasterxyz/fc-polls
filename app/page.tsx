@@ -1,4 +1,4 @@
-import { PollCreateForm } from '@/../app/form';
+import { PollCreateForm } from '@/app/form';
 
 export const metadata = {
     title: 'Farcaster polls',
