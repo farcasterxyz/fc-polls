@@ -32,7 +32,7 @@ export function PollCreateForm() {
       },
   );
 
-  let pollStub = {
+  let pollStub: Poll = {
     id: uuidv4(),
     created_at: new Date().getTime(),
     title: "",
