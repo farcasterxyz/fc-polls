@@ -1,3 +1,8 @@
+> [!IMPORTANT]
+> This minimal example demonstrates how to build a Frames poll without the use of a Frame-specific framework.
+> If you're looking to build a Frame check out [frog](https://frog.fm/) or [frames.js](https://framesjs.org/).
+
+
 # Farcaster Frames Poll app
 
 A example Poll app using [Farcaster Frames](https://warpcast.notion.site/Farcaster-Frames-4bd47fe97dc74a42a48d3a234636d8c5). 
