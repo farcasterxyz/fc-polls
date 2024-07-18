@@ -1,6 +1,6 @@
 > [!IMPORTANT]
-> This minimal example demonstrates how to build a Frames poll without the use of a Frame-specific framework.
-> If you're looking to build a Frame check out [frog](https://frog.fm/) or [frames.js](https://framesjs.org/).
+> This minimal example demonstrates how to build a poll Frame without the use of a framework.
+> If you're looking to build a Frame we recommend using [frog](https://frog.fm/) or [frames.js](https://framesjs.org/).
 
 
 # Farcaster Frames Poll app
