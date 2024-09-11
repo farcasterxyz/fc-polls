@@ -6,7 +6,7 @@ import {Poll, POLL_EXPIRY} from "./types";
 import {redirect} from "next/navigation";
 
 export async function savePoll(poll: Poll, formData: FormData) {
-  let newPoll = {
+  let newPoll: Poll = {
     ...poll,
     created_at: Date.now(),
     title: formData.get("title") as string,

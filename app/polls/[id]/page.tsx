@@ -5,7 +5,7 @@ import Head from "next/head";
 import {Metadata, ResolvingMetadata} from "next";
 
 async function getPoll(id: string): Promise<Poll> {
-    let nullPoll = {
+    let nullPoll: Poll = {
         id: "",
         title: "No poll found",
         option1: "",
